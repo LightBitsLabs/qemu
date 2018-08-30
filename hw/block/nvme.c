@@ -35,6 +35,7 @@
 #include "sysemu/block-backend.h"
 
 #include "nvme.h"
+#include "qemu/bitmap.h"
 
 static void nvme_process_sq(void *opaque);
 
@@ -1045,6 +1046,7 @@ static int nvme_init(PCIDevice *pci_dev)
         id_ns->ncap  = id_ns->nuse = id_ns->nsze =
             cpu_to_le64(n->ns_size >>
                 id_ns->lbaf[NVME_ID_NS_FLBAS_INDEX(ns->id_ns.flbas)].ds);
+        ns->uncorrectable = bitmap_new(id_ns->nsze);
     }
     return 0;
 }

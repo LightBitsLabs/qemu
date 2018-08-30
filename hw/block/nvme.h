@@ -748,6 +748,7 @@ typedef struct NvmeCQueue {
 
 typedef struct NvmeNamespace {
     NvmeIdNs        id_ns;
+    unsigned long *uncorrectable;
 } NvmeNamespace;
 
 #define TYPE_NVME "nvme"

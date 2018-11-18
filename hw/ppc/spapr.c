@@ -4141,6 +4141,24 @@ DEFINE_SPAPR_MACHINE_NAMED(2_8, ubuntu_zesty, "zesty", false);
 DEFINE_SPAPR_MACHINE_NAMED(2_10, ubuntu_artful, "artful", false);
 DEFINE_SPAPR_MACHINE_NAMED(2_11, ubuntu_bionic, "bionic", true);
 
+/* Special 2.11 type for 1761372, since 2.12 is unreleased and 18.04 is 2.11 */
+static void spapr_machine_2_11_sxxm_instance_options(MachineState *machine)
+{
+    spapr_machine_2_11_instance_options(machine);
+}
+
+static void spapr_machine_2_11_sxxm_class_options(MachineClass *mc)
+{
+    sPAPRMachineClass *smc = SPAPR_MACHINE_CLASS(mc);
+
+    spapr_machine_2_11_class_options(mc);
+    smc->default_caps.caps[SPAPR_CAP_CFPC] = SPAPR_CAP_WORKAROUND;
+    smc->default_caps.caps[SPAPR_CAP_SBBC] = SPAPR_CAP_WORKAROUND;
+    smc->default_caps.caps[SPAPR_CAP_IBS] = SPAPR_CAP_FIXED_CCD;
+}
+DEFINE_SPAPR_MACHINE_NAMED(2_11_sxxm, ubuntu_bionic_sxxm, "bionic-sxxm", false);
+/* end Special 2.11 type for 1761372 */
+
 static void spapr_machine_register_types(void)
 {
     type_register_static(&spapr_machine_info);

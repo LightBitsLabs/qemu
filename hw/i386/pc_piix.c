@@ -1181,6 +1181,16 @@ static void pc_bionic_machine_options(MachineClass *m)
 DEFINE_I440FX_MACHINE(bionic, "pc-i440fx-bionic", NULL,
                       pc_bionic_machine_options);
 
+static void pc_bionic_hpb_machine_options(MachineClass *m)
+{
+    pc_i440fx_2_11_machine_options(m);
+    m->desc = "Ubuntu 18.04 PC (i440FX + PIIX, +host-phys-bits=true, 1996)";
+    m->alias = NULL;
+    SET_MACHINE_COMPAT(m, PC_HOST_PHYS_BITS_TRUE);
+}
+DEFINE_I440FX_MACHINE(bionic_hpb, "pc-i440fx-bionic-hpb", NULL,
+                      pc_bionic_hpb_machine_options);
+
 /*
  * Due to bug 1621042 we have to consider the broken old wily machine
  * type as valid xenial type to ensure older VMs that got created prio

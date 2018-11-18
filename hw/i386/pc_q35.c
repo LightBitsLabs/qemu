@@ -432,3 +432,14 @@ static void pc_q35_bionic_machine_options(MachineClass *m)
 }
 DEFINE_Q35_MACHINE(bionic, "pc-q35-bionic", NULL,
                    pc_q35_bionic_machine_options);
+
+static void pc_q35_bionic_hpb_machine_options(MachineClass *m)
+{
+    pc_q35_2_11_machine_options(m);
+    m->desc = "Ubuntu 18.04 PC (Q35 + ICH9, +host-phys-bits=true, 2009)";
+    /* The ubuntu alias and default is on the i440fx type */
+    m->alias = NULL;
+    SET_MACHINE_COMPAT(m, PC_HOST_PHYS_BITS_TRUE);
+}
+DEFINE_Q35_MACHINE(bionic_hpb, "pc-q35-bionic-hpb", NULL,
+                   pc_q35_bionic_hpb_machine_options);

@@ -4,8 +4,11 @@ QEMU_TOP := $(WORKSPACE_TOP)/qemu
 build:
 	echo "start build qemu"
 	mkdir -p $(MY_COMPONENT_PATH)/qemu_deb_files/
-	cp -r $(QEMU_TOP) $(MY_COMPONENT_PATH)/qemu_deb_files/
-	cd $(QEMU_TOP) $(MY_COMPONENT_PATH)/qemu_deb_files/qemu && exec dpkg-buildpackage -rfakeroot -uc -b
+	cp -r $(QEMU_TOP) $(MY_COMPONENT_PATH)/qemu_deb_files/ || true
+	cd $(MY_COMPONENT_PATH)/qemu_deb_files/qemu
+	dpkg-buildpackage -rfakeroot -uc -b
 
 clean:
 	sudo rm -rf $(MY_COMPONENT_PATH)
+docker:
+	

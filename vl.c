@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 #define MAX_VIRTIO_CONSOLES 1
 #define MAX_SCLP_CONSOLES 1
 
-static const char *data_dir[16];
+static const char *data_dir[32];
 static int data_dir_idx;
 const char *bios_name = NULL;
 enum vga_retrace_method vga_retrace_method = VGA_RETRACE_DUMB;
@@ -4317,7 +4317,14 @@ int main(int argc, char **argv, char **envp)
     /* qemu_add_data_dir(os_find_datadir()); */
 
     /* add the datadir specified when building */
+#ifdef CONFIG_QEMU_DATAPATH
+    dirs = g_strsplit(CONFIG_QEMU_DATAPATH, G_SEARCHPATH_SEPARATOR_S, 0);
+    for (i = 0; dirs[i] != NULL; i++) {
+        qemu_add_data_dir(dirs[i]);
+    }
+#else
     qemu_add_data_dir(CONFIG_QEMU_DATADIR);
+#endif
 
     /* -L help lists the data directories and exits. */
     if (list_data_dirs) {

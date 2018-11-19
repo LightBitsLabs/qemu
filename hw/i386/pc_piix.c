@@ -328,7 +328,6 @@ static void pc_compat_2_2(MachineState *machine)
 static void pc_compat_2_1(MachineState *machine)
 {
     pc_compat_2_2(machine);
-    x86_cpu_change_kvm_default("svm", NULL);
 }
 
 static void pc_compat_2_0(MachineState *machine)

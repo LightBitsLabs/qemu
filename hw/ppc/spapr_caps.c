@@ -150,9 +150,8 @@ out:
     g_free(val);
 }
 
-static void ATTRIBUTE_UNUSED spapr_cap_get_string(Object *obj, Visitor *v,
-                                                  const char *name,
-                                                  void *opaque, Error **errp)
+static void  spapr_cap_get_string(Object *obj, Visitor *v, const char *name,
+                                  void *opaque, Error **errp)
 {
     sPAPRCapabilityInfo *cap = opaque;
     sPAPRMachineState *spapr = SPAPR_MACHINE(obj);
@@ -170,9 +169,8 @@ static void ATTRIBUTE_UNUSED spapr_cap_get_string(Object *obj, Visitor *v,
     g_free(val);
 }
 
-static void ATTRIBUTE_UNUSED spapr_cap_set_string(Object *obj, Visitor *v,
-                                                  const char *name,
-                                                  void *opaque, Error **errp)
+static void spapr_cap_set_string(Object *obj, Visitor *v, const char *name,
+                                 void *opaque, Error **errp)
 {
     sPAPRCapabilityInfo *cap = opaque;
     sPAPRMachineState *spapr = SPAPR_MACHINE(obj);
@@ -251,14 +249,26 @@ static void cap_dfp_apply(sPAPRMachineState *spapr, uint8_t val, Error **errp)
     }
 }
 
+sPAPRCapPossible cap_cfpc_possible = {
+    .num = 3,
+    .vals = {"broken", "workaround", "fixed"},
+    .help = "broken - no protection, workaround - workaround available,"
+            " fixed - fixed in hardware",
+};
+
 static void cap_safe_cache_apply(sPAPRMachineState *spapr, uint8_t val,
                                  Error **errp)
 {
+    uint8_t kvm_val =  kvmppc_get_cap_safe_cache();
+
     if (tcg_enabled() && val) {
         /* TODO - for now only allow broken for TCG */
-        error_setg(errp, "Requested safe cache capability level not supported by tcg, try a different value for cap-cfpc");
-    } else if (kvm_enabled() && (val > kvmppc_get_cap_safe_cache())) {
-        error_setg(errp, "Requested safe cache capability level not supported by kvm, try a different value for cap-cfpc");
+        error_setg(errp,
+"Requested safe cache capability level not supported by tcg, try a different value for cap-cfpc");
+    } else if (kvm_enabled() && (val > kvm_val)) {
+        error_setg(errp,
+"Requested safe cache capability level not supported by kvm, try cap-cfpc=%s",
+                   cap_cfpc_possible.vals[kvm_val]);
     }
 }
 
@@ -323,9 +333,10 @@ sPAPRCapabilityInfo capability_table[SPAPR_CAP_NUM] = {
         .name = "cfpc",
         .description = "Cache Flush on Privilege Change" VALUE_DESC_TRISTATE,
         .index = SPAPR_CAP_CFPC,
-        .get = spapr_cap_get_tristate,
-        .set = spapr_cap_set_tristate,
+        .get = spapr_cap_get_string,
+        .set = spapr_cap_set_string,
         .type = "string",
+        .possible = &cap_cfpc_possible,
         .apply = cap_safe_cache_apply,
     },
     [SPAPR_CAP_SBBC] = {

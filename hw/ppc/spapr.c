@@ -3993,6 +3993,23 @@ static void spapr_machine_2_6_class_options(MachineClass *mc)
 
 DEFINE_SPAPR_MACHINE(2_6, "2.6", false);
 
+static void spapr_machine_2_12_sxxm_instance_options(MachineState *machine)
+{
+    spapr_machine_2_12_instance_options(machine);
+}
+
+static void spapr_machine_2_12_sxxm_class_options(MachineClass *mc)
+{
+    sPAPRMachineClass *smc = SPAPR_MACHINE_CLASS(mc);
+
+    spapr_machine_2_12_class_options(mc);
+    smc->default_caps.caps[SPAPR_CAP_CFPC] = SPAPR_CAP_WORKAROUND;
+    smc->default_caps.caps[SPAPR_CAP_SBBC] = SPAPR_CAP_WORKAROUND;
+    smc->default_caps.caps[SPAPR_CAP_IBS] = SPAPR_CAP_FIXED_CCD;
+}
+
+DEFINE_SPAPR_MACHINE(2_12_sxxm, "2.12-sxxm", false);
+
 /*
  * pseries-2.5
  */

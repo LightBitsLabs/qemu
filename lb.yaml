@@ -1,0 +1,6 @@
+qemu:
+  qemu:
+    deps:
+      - file://hw
+    build:
+      - make -f Makefile.lb build

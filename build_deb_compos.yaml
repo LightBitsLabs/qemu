@@ -1,0 +1,7 @@
+version: '2'
+services:
+  qemu_builder:
+    image: 607d827be64a
+    volumes: ['/root/workspace/qemu/qemu/:/qemu','/root/workspace/qemu/:/target']
+    cap_add: [ALL]
+

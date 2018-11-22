@@ -38,6 +38,7 @@ common_configure_opts = \
 	--extra-ldflags="$(LDFLAGS) -Wl,--as-needed" \
 	--prefix=/usr \
 	--sysconfdir=/etc \
+	--disable-werror \
 	--libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
 	--libexecdir=/usr/lib/qemu \
 	--localstatedir=/var \
